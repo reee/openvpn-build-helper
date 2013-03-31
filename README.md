@@ -1,7 +1,6 @@
 openvpn-build-helper
 ====================
 
-#项目说明
 openvpn官方提供了适用于各个系统下的openvpn封装工具。[openvpn-build](https://github.com/OpenVPN/openvpn-build)
 
 对于Windows下面的封装，提供了nsi脚本。但是缺乏一些相关变量和一些预编译的二进制文件。
