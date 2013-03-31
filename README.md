@@ -9,5 +9,7 @@ openvpn官方提供了适用于各个系统下的openvpn封装工具：[openvpn-
 
 ##所以我到底干了什么？
 0.从openvpn build同步过来的脚本加了必要的一些config，从openvpn.net提供的安装文件解包出二进制文件。然后添加了自己的配置文件和README。
+
 1.如果openvpn build上游更新就合并过来。
+
 2.如果openvpn二进制文件更新同样合并到pre-bin。
