@@ -31,10 +31,10 @@ SetCompressor lzma
 ;----------------The Flowing Line Should Be Change----------------
 ;Configuration
 !define PACKAGE_NAME   "openvpn"
-!define VERSION_STRING   "2.3"
+!define VERSION_STRING   "2.3.1"
 !define SPECIAL_BUILD   "eduVPN"
 !define ARCH   "i686"
-!define OUTPUT   "${PACKAGE_NAME}-${VERSION_STRING}-${SPECIAL_BUILD}-${ARCH}.exe"
+!define OUTPUT   "F:\Dropbox\eduVPN\win-setup\${PACKAGE_NAME}-${VERSION_STRING}-${SPECIAL_BUILD}-${ARCH}.exe"
 !define OPENVPN_ROOT   "F:\Dropbox\eduVPN\openvpn-build-helper\pre-bin\i686"
 !define EDUVPN_CONFIG_DIR   "F:\Dropbox\eduVPN\config"
 !define USE_TAP_WINDOWS
