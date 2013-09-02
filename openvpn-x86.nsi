@@ -31,15 +31,19 @@ SetCompressor lzma
 ;----------------The Flowing Line Should Be Change----------------
 ;Configuration
 !define PACKAGE_NAME   "openvpn"
-!define VERSION_STRING   "2.3.1"
+!define VERSION_STRING   "2.3.2"
 !define SPECIAL_BUILD   "eduVPN"
 !define ARCH   "i686"
-!define OUTPUT   "F:\Dropbox\eduVPN\win-setup\${PACKAGE_NAME}-${VERSION_STRING}-${SPECIAL_BUILD}-${ARCH}.exe"
-!define OPENVPN_ROOT   "F:\Dropbox\eduVPN\openvpn-build-helper\pre-bin\i686"
-!define EDUVPN_CONFIG_DIR   "F:\Dropbox\eduVPN\config"
+!define OUTPUT   "E:\Dropbox\eduVPN\win-setup\${PACKAGE_NAME}-${VERSION_STRING}-${SPECIAL_BUILD}-${ARCH}.exe"
+!define OPENVPN_ROOT   "E:\Dropbox\eduVPN\openvpn-build-helper\pre-bin\i686"
+!define EDUVPN_CONFIG_DIR   "E:\Dropbox\eduVPN\config"
 !define USE_TAP_WINDOWS
 !define USE_OPENVPN_GUI
-!define TAP_WINDOWS_INSTALLER   "F:\Dropbox\eduVPN\openvpn-build-helper\pre-bin\tap-windows.exe"
+!define TAP_WINDOWS_INSTALLER   "E:\Dropbox\eduVPN\openvpn-build-helper\pre-bin\tap-windows.exe"
+;-----We Use Our Own README-----
+!define MUI_FINISHPAGE_SHOWREADME "E:\Dropbox\eduVPN\eduVPN-README.txt"
+!define OUR_OWN_README "E:\Dropbox\eduVPN\eduVPN-README.txt"
+
 ;General
 ;---------------We Also Use Our Own Config File And README Please Refer To Te Following Script-----------------
 
@@ -70,8 +74,6 @@ InstallDirRegKey HKLM "SOFTWARE\${PACKAGE_NAME}" ""
 !define MUI_COMPONENTSPAGE_TEXT_TOP "Select the components to install/upgrade.  Stop any ${PACKAGE_NAME} processes or the ${PACKAGE_NAME} service if it is running.  All DLLs are installed locally."
 
 !define MUI_COMPONENTSPAGE_SMALLDESC
-;-----We Use Our Own README-----
-!define MUI_FINISHPAGE_SHOWREADME "F:\Dropbox\eduVPN\eduVPN-README.txt"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_ABORTWARNING
 !define MUI_ICON "icon.ico"
@@ -200,7 +202,7 @@ Section /o "${PACKAGE_NAME} User-Space Components" SecOpenVPNUserSpace
 	SetOutPath "$INSTDIR\doc"
 	File "${OPENVPN_ROOT}\share\doc\openvpn\INSTALL-win32.txt"
 	; OutPut Our Own README
-	File "F:\Dropbox\eduVPN\eduVPN-README.txt"
+	File "${OUR_OWN_README}"
 	File "${OPENVPN_ROOT}\share\doc\openvpn\openvpn.8.html"
 
 	${If} ${SectionIsSelected} ${SecAddShortcutsWorkaround}
