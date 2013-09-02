@@ -363,7 +363,11 @@ block:
 
 <B>connect-timeout,</B>
 
+<B>explicit-exit-notify,</B>
+
 <B>float,</B>
+
+<B>fragment,</B>
 
 <B>http-proxy,</B>
 
@@ -373,9 +377,15 @@ block:
 
 <B>http-proxy-timeout,</B>
 
+<B>link-mtu,</B>
+
 <B>local,</B>
 
 <B>lport,</B>
+
+<B>mssfix,</B>
+
+<B>mtu-disc,</B>
 
 <B>nobind,</B>
 
@@ -387,9 +397,13 @@ block:
 
 <B>rport,</B>
 
-<B>socks-proxy, and</B>
+<B>socks-proxy,</B>
 
-<B>socks-proxy-retry.</B>
+<B>socks-proxy-retry,</B>
+
+<B>tun-mtu and</B>
+
+<B>tun-mtu-extra.</B>
 
 <P>
 A defaulting mechanism exists for specifying options to apply to
@@ -4175,7 +4189,7 @@ authentication, use
 the authenticated username as the common name,
 rather than the common name from the client cert.
 
-<DT><B>--compat-names [no-remapping]</B>
+<DT><B>--compat-names [no-remapping] (DEPRECATED)</B>
 
 <DD>
 Until OpenVPN v2.3 the format of the X.509 Subject fields was formatted
@@ -4210,28 +4224,52 @@ characters in the usernames, X.509 Subject fields and Common Name variables and
 it complies to the RFC 2253, UTF-8 String Representation of Distinguished
 Names.
 <P>
-As a backwards compatibility for the removed --no-name-remapping feature in
-older OpenVPN versions, the
+The
 <B>no-remapping</B>
 
 mode flag can be used with the
 <B>--compat-names</B>
 
-option.
-When this mode flag is used, the Common Name, Subject, and username strings are
-allowed to include any printable character including space, but excluding
-control characters such as tab, newline, and carriage-return. It ensures
-compatibility with the
-<B>--no-name-remapping</B>
-
-option of OpenVPN versions before v2.3.
+option to be compatible with the now deprecated --no-name-remapping option.
+It is only available at the server. When this mode flag is used, the Common Name,
+Subject, and username strings are allowed to include any printable character
+including space, but excluding control characters such as tab, newline, and
+carriage-return. no-remapping is only available on the server side.
 <P>
 <B>Please note:</B>
 
-This option will not be around for a long time.  It is only implemented
+This option is immediately deprecated.  It is only implemented
 to make the transition to the new formatting less intrusive.  It will be
-removed either in OpenVPN v2.4 or v2.5.  So please make sure you start
-the process to support the new formatting as soon as possible.
+removed either in OpenVPN v2.4 or v2.5.  So please make sure you use the
+<B>--verify-x509-name</B>
+
+option instead of
+<B>--tls-remote</B>
+
+as soon as possible and update your scripts where necessary.
+
+<DT><B>--no-name-remapping (DEPRECATED)</B>
+
+<DD>
+The
+<B>--no-name-remapping</B>
+
+option is an alias for
+<B>--compat-names&nbsp;no-remapping.</B>
+
+It ensures compatibility with server configurations using the
+<B>--no-name-remapping</B>
+
+option.
+<P>
+<B>Please note:</B>
+
+This option is now deprecated.  It will be removed either in OpenVPN v2.4
+or v2.5.  So please make sure you support the new X.509 name formatting
+described with the
+<B>--compat-names</B>
+
+option as soon as possible.
 
 <DT><B>--port-share host port [dir]</B>
 
@@ -5649,10 +5687,11 @@ Field in x509 certificate subject to be used as username (default=CN).
 <B>Fieldname</B>
 
 will be uppercased before matching. When this option is used, the
---tls-remote option will match against the chosen fieldname instead
-of the CN.
+<B>--verify-x509-username</B>
 
-<DT><B>--tls-remote name</B>
+option will match against the chosen fieldname instead of the CN.
+
+<DT><B>--tls-remote name (DEPRECATED)</B>
 
 <DD>
 Accept connections only from a host with X509 name
@@ -5693,6 +5732,75 @@ works in a
 <B>--chroot</B>
 
 environment too.
+<P>
+<B>Please also note:</B>
+
+This option is now deprecated.  It will be removed either in OpenVPN v2.4
+or v2.5.  So please make sure you support the new X.509 name formatting
+described with the
+<B>--compat-names</B>
+
+option as soon as possible by updating your configurations to use
+<B>--verify-x509-name</B>
+
+instead.
+
+<DT><B>--verify-x509-name name type</B>
+
+<DD>
+Accept connections only if a host's X.509 name is equal to
+<B>name.</B>
+
+The remote host must also pass all other tests of verification.
+<P>
+Which X.509 name is compared to
+<B>name</B>
+
+depends on the setting of type.
+<B>type</B>
+
+can be &quot;subject&quot; to match the complete subject DN (default),
+&quot;name&quot; to match a subject RDN or &quot;name-prefix&quot; to match a subject RDN prefix.
+Which RDN is verified as name depends on the
+<B>--x509-username-field</B>
+
+option. But it defaults to the common name (CN), e.g. a certificate with a
+subject DN &quot;C=KG, ST=NA, L=Bishkek, CN=Server-1&quot; would be matched by:
+<P>
+<B>--verify-x509-name 'C=KG, ST=NA, L=Bishkek, CN=Server-1'</B>
+
+and
+<B>--verify-x509-name Server-1 name</B>
+
+or you could use
+<B>--verify-x509-name Server- name-prefix</B>
+
+if you want a client to only accept connections to &quot;Server-1&quot;, &quot;Server-2&quot;, etc.
+<P>
+<B>--verify-x509-name</B>
+
+is a useful replacement for the
+<B>--tls-verify</B>
+
+option to verify the remote host, because
+<B>--verify-x509-name</B>
+
+works in a
+<B>--chroot</B>
+
+environment without any dependencies.
+<P>
+Using a name prefix is a useful alternative to managing
+a CRL (Certificate Revocation List) on the client, since it allows the client
+to refuse all certificates except for those associated
+with designated servers.
+<P>
+<B>NOTE:</B>
+
+Test against a name prefix only when you are using OpenVPN with
+a custom CA certificate that is under your control.
+Never use this option with type &quot;name-prefix&quot; when your client certificates
+are signed by a third party, such as a commercial web CA.
 
 <DT><B>--x509-track attribute</B>
 
@@ -5738,7 +5846,7 @@ a man-in-the-middle attack where an authorized client
 attempts to connect to another client by impersonating the server.
 The attack is easily prevented by having clients verify
 the server certificate using any one of
-<B>--ns-cert-type, --tls-remote,</B>
+<B>--ns-cert-type, --verify-x509-name,</B>
 
 or
 <B>--tls-verify.</B>
@@ -5807,7 +5915,7 @@ a man-in-the-middle attack where an authorized client
 attempts to connect to another client by impersonating the server.
 The attack is easily prevented by having clients verify
 the server certificate using any one of
-<B>--remote-cert-tls, --tls-remote,</B>
+<B>--remote-cert-tls, --verify-x509-name,</B>
 
 or
 <B>--tls-verify.</B>
@@ -8087,6 +8195,6 @@ James Yonan &lt;<A HREF="mailto:jim@yonan.net">jim@yonan.net</A>&gt;
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 16:02:47 GMT, March 07, 2013
+Time: 13:09:39 GMT, August 22, 2013
 </BODY>
 </HTML>
