@@ -240,6 +240,9 @@ Section /o "${PACKAGE_NAME} Service" SecService
 	File "${EDUVPN_CONFIG_DIR}\ta.key"
 	File "${EDUVPN_CONFIG_DIR}\he-US-6.ovpn"
 	File "${EDUVPN_CONFIG_DIR}\sakura-JP-6.ovpn"
+	File "${EDUVPN_CONFIG_DIR}\ramnode-US-6.ovpn"
+	File "${EDUVPN_CONFIG_DIR}\sakura-JP-4-asia.ovpn"
+	File "${EDUVPN_CONFIG_DIR}\ramnode-4-asia.ovpn"
 	
 	CreateDirectory "$INSTDIR\log"
 	FileOpen $R0 "$INSTDIR\log\README.txt" w
